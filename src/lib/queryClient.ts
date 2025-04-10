@@ -1,7 +1,11 @@
-import { QueryClient } from '@tanstack/react-query'
+import { QueryCache, QueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
 export const createQueryClient = () =>
   new QueryClient({
+    queryCache: new QueryCache({
+      onError: () => toast.error(`Something went wrong`),
+    }),
     defaultOptions: {
       queries: {
         placeholderData: (prev: unknown) => prev,

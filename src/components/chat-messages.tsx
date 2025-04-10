@@ -38,15 +38,14 @@ export const ChatMessages = ({
 
   const optimisticMessages = useMemo(() => {
     return latestPendingMutation
-      ?
-        [
+      ? [
           ...messages,
-            createMessage(
-              latestPendingMutation.variables,
-              selectedPhoneId,
-              optimisticUserId
-            ),
-          ]
+          createMessage(
+            latestPendingMutation.variables,
+            selectedPhoneId,
+            optimisticUserId
+          ),
+        ]
       : messages
   }, [latestPendingMutation, messages, selectedPhoneId, optimisticUserId])
 
@@ -96,7 +95,7 @@ export const ChatMessages = ({
                   : 'bg-white text-black mr-auto'
               )}
             >
-              <div className="text-md">{message.text}</div>
+              <div className="text-md whitespace-pre-wrap">{message.text}</div>
               <div
                 className={`text-xs text-end ${
                   message.direction === 'outgoing'
@@ -130,7 +129,7 @@ function createMessage(
   userId: string
 ): MessageDataItem {
   return {
-    id: `new-message-${Date.now()}}`,
+    id: `new-message-${Date.now()}`,
     from: params.from,
     to: params.to,
     text: params.content,

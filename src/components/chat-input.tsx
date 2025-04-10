@@ -66,11 +66,12 @@ export const ChatInput = ({ from, to }: ChatInputProps) => {
           name="content"
           autoComplete="off"
           placeholder="Type a message..."
-          className={`w-full max-h-30 min-h-[4rem] rounded-md px-4 py-3 resize-none overflow-y-auto
+          className={`w-full max-h-30 min-h-[4rem] rounded-md px-4 py-3 resize-none overflow-y-auto whitespace-pre-wrap
           focus:outline-none focus:ring-2 focus:ring-purple-500
           selection:bg-purple-200 selection:text-black
           ${error ? 'border-red-500' : ''}
-        `}
+          ${isPending ? 'cursor-not-allowed opacity-50' : ''}
+          `}
         />
         {error && <p className="text-sm text-red-500 mt-1">{error}</p>}
       </div>

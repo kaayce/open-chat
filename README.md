@@ -55,9 +55,13 @@ I used **React Router v7** for routing and state. State in URL is used to persis
 
 ### Tradeoffs
 
-There are opportunities for improvement with the way messages are viewed and sent.
-Right now, the app only fetches the most recent 10 messages. However, it does not yet support pagination.
-A follow up would be to implement pagination to allow users to view more messages.
+1. There are opportunities for improvement with the way messages are viewed and sent.
+   Right now, the app only fetches the most recent 10 messages. However, it does not yet support pagination.
+   A follow up would be to implement pagination to allow users to view more messages.
+
+2. Currently, users need to click the **send** button to send a message.
+   While using the `Enter` key would enhance the user experience, I opted to leave it as is for now, allowing users to press Enter to create a new line.
+   As an improvement, we could configure the `Enter` key to send messages, while using `Shift + Enter` for adding a new line.
 
 ### Assumptions
 
