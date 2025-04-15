@@ -17,15 +17,22 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from './ui/collapsible'
-import { User } from './user'
-import { PhoneNumber } from './phone-number'
+import { PhoneNumbers } from './phone-numbers'
+import { Users } from './users'
+import { useMemo } from 'react'
 
 export function AppSidebar() {
   const { setSelectedPhoneId, selectedPhoneId } = useSelectedPhoneNumber()
   const { phoneNumbers, phoneIdToUsers, isPhoneNumbersLoading } =
     usePhoneNumbersQuery()
 
-  if (isPhoneNumbersLoading || !selectedPhoneId) {
+  const isLoading = isPhoneNumbersLoading || !selectedPhoneId
+  const users = useMemo(
+    () => (selectedPhoneId ? phoneIdToUsers[selectedPhoneId] : []),
+    [phoneIdToUsers, selectedPhoneId]
+  )
+
+  if (isLoading) {
     return <Skeleton className="w-full h-full" />
   }
 
@@ -34,39 +41,36 @@ export function AppSidebar() {
       <SidebarHeader className="space-y-4">
         <div className="text-xl font-bold p-2 text-purple-500">OpenChat</div>
       </SidebarHeader>
-      <SidebarContent className="px-2">
+
+      <SidebarContent className="px-2 space-y-6">
+        {/* Phone Numbers Section */}
         <SidebarMenu>
           <SidebarGroupLabel>Workspace phone numbers</SidebarGroupLabel>
-          {!phoneNumbers ||
-            (isPhoneNumbersLoading && <Skeleton className="h-4 w-full" />)}
-          {phoneNumbers.map((phoneNumber) => (
-            <PhoneNumber
-              key={phoneNumber.id}
-              phoneNumber={phoneNumber}
-              selectedPhoneNumberId={selectedPhoneId}
-              setSelectedPhoneId={setSelectedPhoneId}
-            />
-          ))}
+          <PhoneNumbers
+            phoneNumbers={phoneNumbers}
+            selectedPhoneNumberId={selectedPhoneId}
+            setSelectedPhoneId={setSelectedPhoneId}
+          />
         </SidebarMenu>
 
+        {/* Team Section */}
         <Collapsible defaultOpen className="group/collapsible">
-          <SidebarGroup title="Your Team">
-            <SidebarGroupLabel asChild>
-              <CollapsibleTrigger>
+          <SidebarGroup>
+            <CollapsibleTrigger asChild>
+              <SidebarGroupLabel>
                 Your Team
                 <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
-              </CollapsibleTrigger>
-            </SidebarGroupLabel>
+              </SidebarGroupLabel>
+            </CollapsibleTrigger>
             <CollapsibleContent>
-              <SidebarGroupContent />
-              {selectedPhoneId &&
-                phoneIdToUsers[selectedPhoneId]?.map((user) => (
-                  <User user={user} key={user.id} />
-                ))}
+              <SidebarGroupContent>
+                <Users users={users} />
+              </SidebarGroupContent>
             </CollapsibleContent>
           </SidebarGroup>
         </Collapsible>
       </SidebarContent>
+
       <SidebarFooter />
     </Sidebar>
   )
